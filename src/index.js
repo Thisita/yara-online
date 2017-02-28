@@ -4,12 +4,8 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 
-// Bring in mongo schemas
-import './models/Rules';
-import './models/RuleMetas';
-
-// Connect to mongodb
-mongoose.connect('mongodb://localhost/yara');
+// Initialize models
+import './models';
 
 // Create express app
 
