@@ -1,8 +1,10 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-var RuleMetaSchema = new mongoose.Schema({
+// Define schema
+const RuleMetaSchema = new mongoose.Schema({
   name: String,
   value: String
 });
 
+// Expose schema
 mongoose.model('RuleMeta', RuleMetaSchema);

@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-var RuleSchema = new mongoose.Schema({
+// Define schema
+const RuleSchema = new mongoose.Schema({
   imports: [String],
   identifier: String,
   visibility: {type: String, default: 'public'},
@@ -13,4 +14,5 @@ var RuleSchema = new mongoose.Schema({
   raw: String
 });
 
+// Expose schema
 mongoose.model('Rule', RuleSchema);
