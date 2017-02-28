@@ -5,7 +5,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
-//mongoose.connect();
+mongoose.connect('mongodb://localhost/yara');
 
 app.use(express.static(__dirname + '/public'));
 app.use('/css/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
@@ -17,4 +17,3 @@ app.use(methodOverride());
 
 app.listen(8080);
 console.log('App listening on port 8080');
-
