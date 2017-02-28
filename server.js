@@ -5,6 +5,11 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
+// Bring in mongo schemas
+require('./models/Rules');
+require('./models/RuleMetas');
+
+// Connect to mongodb
 mongoose.connect('mongodb://localhost/yara');
 
 app.use(express.static(__dirname + '/public'));
