@@ -1,16 +1,19 @@
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
+import express from 'express';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
 
 // Bring in mongo schemas
-require('./models/Rules');
-require('./models/RuleMetas');
+import './models/Rules';
+import './models/RuleMetas';
 
 // Connect to mongodb
 mongoose.connect('mongodb://localhost/yara');
+
+// Create express app
+
+let app = express();
 
 app.use(express.static(__dirname + '/public'));
 app.use('/css/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
@@ -20,5 +23,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({type: 'application/vnd.api+json'}));
 app.use(methodOverride());
 
+// Open listener
 app.listen(8080);
 console.log('App listening on port 8080');
