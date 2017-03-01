@@ -7,12 +7,18 @@ const RuleMeta = mongoose.model('RuleMeta');
 export const engine = 'ejs';
 
 export const function before(req, res, next) {
-  let rule = Rule.findById(req.params.rule_id);
-  if (!pet) {
-    return next('route');
-  }
-  req.rule = rule;
-  next();
+  let query = Rule.findById(req.params.rule_id);
+  query.exec(function(err, rule) {
+    if(err) {
+      return next('route');
+    }
+    if(!rule) {
+      return next(new Error('can\'t find rule'));
+    }
+
+    req.rule = rule;
+    return next();
+  });
 };
 
 export const function show(req, res, next) {
