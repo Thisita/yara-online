@@ -1,3 +1,4 @@
+import express from 'express';
 import rule from './rule';
 
 const controllers = [
@@ -5,15 +6,17 @@ const controllers = [
 ];
 
 function boot(parent, options) {
-  const verbose = options.verbose;
-  const name = controller.name;
-  const prefix = controller.prefix || '';
+  const verbose = options.verbose || false;
   let app = express();
+  let name;
+  let prefix;
   let handler;
   let method;
   let path;
 
   for(let controller in controllers) {
+    name = controller.name;
+    prefix = controller.prefix || '';
     // Allow specifying the view engine
     if(controller.engine) {
       app.set('view engine', controller.engine);
