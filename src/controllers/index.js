@@ -8,12 +8,12 @@ const controllers = [
 
 function boot(parent, options) {
   const verbose = options.verbose || false;
-  let app = express();
+  const app = express();
   let name;
   let prefix;
   let handler;
   let method;
-  let path;
+  let http_path;
 
   for(let controller in controllers) {
     name = controller.name;
@@ -26,54 +26,53 @@ function boot(parent, options) {
 
     // Generate routes based on exported methods
     for (let key in controller) {
-      if (~['name', 'prefix', 'engine', 'before'].indexOf(key)) {
-        continue;
-      }
-      switch (key) {
-        case 'show':
-          method = 'get';
-          path = `/${name}/:${name}_id`;
-          break;
-        case 'list':
-          method = 'get';
-          path = `/${name}s`;
-          break;
-        case 'edit':
-          method = 'get';
-          path = `/${name}/:${name}_id/edit`;
-          break;
-        case 'update':
-          method = 'put';
-          path = `/${name}/:${name}_id`;
-          break;
-        case 'create':
-          method = 'post';
-          path = `/${name}`;
-          break;
-        case 'index':
-          method = 'get';
-          path = '/';
-          break;
-        default:
-          /* istanbul ignore next */
-          throw new Error(`unrecognized route: ${name}.${key}`);
-      }
+      if (!['name', 'prefix', 'engine', 'before'].includes(key)) {
+        switch (key) {
+          case 'show':
+            method = 'get';
+            http_path = `/${name}/:${name}_id`;
+            break;
+          case 'list':
+            method = 'get';
+            http_path = `/${name}s`;
+            break;
+          case 'edit':
+            method = 'get';
+            http_path = `/${name}/:${name}_id/edit`;
+            break;
+          case 'update':
+            method = 'put';
+            http_path = `/${name}/:${name}_id`;
+            break;
+          case 'create':
+            method = 'post';
+            http_path = `/${name}`;
+            break;
+          case 'index':
+            method = 'get';
+            http_path = '/';
+            break;
+          default:
+            /* istanbul ignore next */
+            throw new Error(`unrecognized route: ${name}.${key}`);
+        }
 
-      // Setup
-      handler = controller[key];
-      path = prefix + path;
+        // Setup
+        handler = controller[key];
+        path = prefix + http_path;
 
-      // before middleware support
-      if (controller.before) {
-        app[method](path, controller.before, handler);
-        verbose && console.log('\t%s %s -> before -> %s', method.toUpperCase(), path, key);
-      } else {
-        app[method](path, handler);
-        verbose && console.log('\t%s %s -> %s', method.toUpperCase(), path, key);
+        // before middleware support
+        if (controller.before) {
+          app[method](http_path, controller.before, handler);
+          verbose && console.log('\t%s %s -> before -> %s', method.toUpperCase(), http_path, key);
+        } else {
+          app[method](http_path, handler);
+          verbose && console.log('\t%s %s -> %s', method.toUpperCase(), http_path, key);
+        }
+
+        // Mount the app
+        parent.use(app);
       }
-
-      // Mount the app
-      parent.use(app);
     }
   }
 }
