@@ -1,8 +1,9 @@
+import path from 'path';
 import express from 'express';
 import rule from './rule';
 
 const controllers = [
-  rule
+  rule,
 ];
 
 function boot(parent, options) {
@@ -21,33 +22,33 @@ function boot(parent, options) {
     if(controller.engine) {
       app.set('view engine', controller.engine);
     }
-    app.set('views', __dirname + 'views/' + name);
+    app.set('views', path.join(path.join(__dirname, 'views/'), name));
 
     // Generate routes based on exported methods
-    for(let key in controller) {
-      if(~['name', 'prefix', 'engine', 'before'].indexOf(key)) {
+    for (let key in controller) {
+      if (~['name', 'prefix', 'engine', 'before'].indexOf(key)) {
         continue;
       }
-      switch(key) {
+      switch (key) {
         case 'show':
           method = 'get';
-          path = '/' + name + '/:' + name + '_id';
+          path = `/${name}/:${name}_id`;
           break;
         case 'list':
           method = 'get';
-          path = '/' + name + 's';
+          path = `/${name}s`;
           break;
         case 'edit':
           method = 'get';
-          path = '/' + name + '/:' + name + '_id/edit';
+          path = `/${name}/:${name}_id/edit`;
           break;
         case 'update':
           method = 'put';
-          path = '/' + name + '/:' + name + '_id';
+          path = `/${name}/:${name}_id`;
           break;
         case 'create':
           method = 'post';
-          path = '/' + name;
+          path = `/${name}`;
           break;
         case 'index':
           method = 'get';
@@ -55,7 +56,7 @@ function boot(parent, options) {
           break;
         default:
           /* istanbul ignore next */
-          throw new Error('unrecognized route: ' + name + '.' + key);
+          throw new Error(`unrecognized route: ${name}.${key}`);
       }
 
       // Setup
@@ -63,7 +64,7 @@ function boot(parent, options) {
       path = prefix + path;
 
       // before middleware support
-      if(controller.before) {
+      if (controller.before) {
         app[method](path, controller.before, handler);
         verbose && console.log('\t%s %s -> before -> %s', method.toUpperCase(), path, key);
       } else {
