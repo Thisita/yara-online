@@ -1,5 +1,5 @@
-global.jQuery = require('jquery');
-var bootstrap = require('bootstrap');
-var angular = require('angular');
+import jQuery from 'jquery';
+import bootstrap from 'bootstrap';
+import angular from 'angular';
 
-var app = angular.module('yaraOnline', []);
+const app = angular.module('yaraOnline', []);
