@@ -1,5 +1,7 @@
-import jQuery from 'jquery';
-import bootstrap from 'bootstrap';
-import angular from 'angular';
+import MainController from './controllers/MainController';
+import SearchService from './services/SearchService';
 
-const app = angular.module('yaraOnline', []);
+angular
+  .module('app', [])
+  .controller('mainController', MainController)
+  .service('searchService', SearchService);
